@@ -9,7 +9,7 @@ var db *gorm.DB
 
 type Task struct{
 	gorm.Model
-	Title string `gorm:""json:"Title"`
+	Title string `gorm:""json:"title"`
 	Description string `json:"description"`
 	AssignedDate string `json:"assignedDate"`
 	Importance int64 `json:"importance"`

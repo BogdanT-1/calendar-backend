@@ -16,6 +16,10 @@ type Task struct{
 	Done bool `json:"done"`
 }
 
+type CompleteTask struct {
+	IDs []int64 `json:"ids"`
+}
+
 func init(){
 	config.Connect()
 	db = config.GetDB()
@@ -44,4 +48,8 @@ func DeleteTask(ID int64) Task{
 	var Task Task
 	db.Where("ID=?", ID).Delete(Task)
 	return Task
+}
+
+func CompleteTasksByIds(IDs []int64) {
+	db.Table("tasks").Where("id IN (?)", IDs).Updates(Task{Done: true})
 }

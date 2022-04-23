@@ -75,3 +75,11 @@ func UpdateTask(w http.ResponseWriter, r *http.Request){
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
+
+func CompleteTasks(w http.ResponseWriter, r *http.Request){
+	var toCompleteTasks = &models.CompleteTask{}
+	utils.ParseBody(r, toCompleteTasks)
+	models.CompleteTasksByIds(toCompleteTasks.IDs)
+	w.Header().Set("Content-Type", "pkglication/json")
+	w.WriteHeader(http.StatusOK)
+}

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/BogdanT-1/calendar-backend/pkg/routes"
+	"github.com/BogdanT-1/calendar-backend/pkg/utils"
 	"github.com/gorilla/mux"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -28,7 +29,11 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 
 func main(){
 	r := mux.NewRouter()
-	routes.RegisterCalendarRoutes(r)
+    config, err := utils.LoadConfig("../")
+    if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	routes.RegisterCalendarRoutes(config, r)
 	http.Handle("/", &CORSRouterDecorator{r})
 	log.Fatal(http.ListenAndServe("localhost:9010", &CORSRouterDecorator{r}))
 }

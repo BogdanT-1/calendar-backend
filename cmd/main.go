@@ -11,26 +11,26 @@ import (
 )
 
 type CORSRouterDecorator struct {
-    R *mux.Router
+	R *mux.Router
 }
 
 func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
-    if origin := req.Header.Get("Origin"); origin != "" {
-        rw.Header().Set("Access-Control-Allow-Origin", origin)
-        rw.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-        rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type")
-    }
-    if req.Method == "OPTIONS" {
-        return
-    }
+	if origin := req.Header.Get("Origin"); origin != "" {
+		rw.Header().Set("Access-Control-Allow-Origin", origin)
+		rw.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type")
+	}
+	if req.Method == "OPTIONS" {
+		return
+	}
 
-    c.R.ServeHTTP(rw, req)
+	c.R.ServeHTTP(rw, req)
 }
 
-func main(){
+func main() {
 	r := mux.NewRouter()
-    config, err := utils.LoadConfig("../")
-    if err != nil {
+	config, err := utils.LoadConfig("../")
+	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}
 	routes.RegisterCalendarRoutes(config, r)

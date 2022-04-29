@@ -21,6 +21,16 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
+func GetTasksByAssignedDate(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	assignedDate := vars["assignedDate"]
+	taskDetails := models.GetTasksByAssignedDate(assignedDate)
+	res, _ := json.Marshal(taskDetails)
+	w.Header().Set("Content-Type", "pkglication/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(res)
+}
+
 func GetTaskById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	taskId := vars["taskId"]

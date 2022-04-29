@@ -10,6 +10,7 @@ var RegisterCalendarRoutes = func(config utils.Config, router *mux.Router) {
 
 	router.HandleFunc("/task/", controllers.CreateTask).Methods("POST")
 	router.HandleFunc("/tasks/", controllers.GetTasks).Methods("GET")
+	router.HandleFunc("/tasks/day/{assignedDate}", controllers.GetTasksByAssignedDate).Methods("GET")
 	router.HandleFunc("/tasks/complete", controllers.CompleteTasks).Methods("POST")
 	router.HandleFunc("/task/{taskId}", controllers.GetTaskById).Methods("GET")
 	router.HandleFunc("/task/{taskId}", controllers.UpdateTask).Methods("PUT")

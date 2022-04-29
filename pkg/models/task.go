@@ -44,6 +44,12 @@ func GetTaskById(Id int64) (*Task, *gorm.DB) {
 	return &getTask, db
 }
 
+func GetTasksByAssignedDate(assignedDate string) []Task {
+	var getTasks []Task
+	db.Where("assigned_date=?", assignedDate).Find(&getTasks)
+	return getTasks
+}
+
 func DeleteTask(ID int64) Task {
 	var Task Task
 	db.Where("ID=?", ID).Delete(Task)

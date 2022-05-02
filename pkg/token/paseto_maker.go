@@ -9,9 +9,13 @@ import (
 )
 
 type PasetoMaker struct {
-	paseto *paseto.V2
+	paseto       *paseto.V2
 	symmetricKey []byte
 }
+
+const (
+	makerSymmKey = "12345678901234567890123456789012"
+)
 
 func NewPasetoMaker(symmetricKey string) (Maker, error) {
 	if len(symmetricKey) != chacha20poly1305.KeySize {
@@ -19,24 +23,31 @@ func NewPasetoMaker(symmetricKey string) (Maker, error) {
 	}
 
 	maker := &PasetoMaker{
-		paseto:  paseto.NewV2(),
+		paseto:       paseto.NewV2(),
 		symmetricKey: []byte(symmetricKey),
 	}
 
 	return maker, nil
 }
 
-func (maker *PasetoMaker)CreateToken(username string, duration time.Duration) (string, error) {
-	payload, err := NewPayload(username, duration) 
+func (maker *PasetoMaker) CreateToken(username string, duration time.Duration) (string, error) {
+	payload, err := NewPayload(username, duration)
 	if err != nil {
 		return "", err
 	}
 
+	if maker.symmetricKey == nil {
+		maker.symmetricKey = []byte(makerSymmKey)
+	}
 	return maker.paseto.Encrypt(maker.symmetricKey, payload, nil)
 }
 
-func (maker *PasetoMaker)VerifyToken(token string) (*Payload, error) {
+func (maker *PasetoMaker) VerifyToken(token string) (*Payload, error) {
 	payload := &Payload{}
+
+	if maker.symmetricKey == nil {
+		maker.symmetricKey = []byte(makerSymmKey)
+	}
 
 	err := maker.paseto.Decrypt(token, maker.symmetricKey, payload, nil)
 	if err != nil {

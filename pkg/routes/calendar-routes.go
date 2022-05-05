@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/BogdanT-1/calendar-backend/pkg/controllers"
+	"github.com/BogdanT-1/calendar-backend/pkg/models"
 	"github.com/BogdanT-1/calendar-backend/pkg/token"
 	"github.com/BogdanT-1/calendar-backend/pkg/utils"
 	"github.com/gorilla/mux"
@@ -45,6 +46,9 @@ func Middleware(h http.Handler) http.Handler {
 			return
 		}
 
+		user := r.Header.Get("User")
+		models.LoggedInUser = user
+
 		w.Header().Set(authorizationPayloadKey, payload.Username)
 		h.ServeHTTP(w, r)
 	})
@@ -55,6 +59,7 @@ var RegisterCalendarRoutes = func(config utils.Config, router *mux.Router) {
 	authRouter := router.Methods(http.MethodPost).Subrouter()
 	authRouter.HandleFunc("/createUser/", controllers.CreateUser).Methods("POST")
 	authRouter.HandleFunc("/loginUser/", controllers.LoginUser).Methods("POST")
+	authRouter.HandleFunc("/refreshToken/", controllers.RenewToken).Methods("POST")
 
 	taskRouter := router.PathPrefix("/v1").Subrouter()
 	taskRouter.Use(Middleware)

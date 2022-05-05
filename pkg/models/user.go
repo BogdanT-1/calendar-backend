@@ -1,6 +1,8 @@
 package models
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -17,9 +19,11 @@ type LoginUserRequest struct {
 }
 
 type LoginUserResponse struct {
-	AccessToken string `json:"access_token"`
-	Username    string `json:"username"`
-	Email       string `json:"email"`
+	RefreshTokenExpiresAt time.Time `json:"refresh_token_expires_at"`
+	RefreshToken          string    `json:"refresh_token"`
+	AccessToken           string    `json:"access_token"`
+	Username              string    `json:"username"`
+	Email                 string    `json:"email"`
 }
 
 func (b *User) CreateUser() *User {

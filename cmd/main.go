@@ -18,7 +18,7 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 	if origin := req.Header.Get("Origin"); origin != "" {
 		rw.Header().Set("Access-Control-Allow-Origin", origin)
 		rw.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, Authorization")
+		rw.Header().Set("Access-Control-Allow-Headers", "Accept, Accept-Language, Content-Type, Authorization, User")
 	}
 	if req.Method == "OPTIONS" {
 		return

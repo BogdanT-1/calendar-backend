@@ -79,6 +79,7 @@ func UpdateTask(w http.ResponseWriter, r *http.Request) {
 	}
 	taskDetails, db := models.GetTaskById(ID)
 	taskDetails = updateTask
+	taskDetails.User = models.LoggedInUser
 	db.Save(&taskDetails)
 	res, _ := json.Marshal(taskDetails)
 	w.Header().Set("Content-Type", "pkglication/json")

@@ -6,6 +6,7 @@ import (
 )
 
 var db *gorm.DB
+var LoggedInUser string
 
 type Task struct {
 	gorm.Model
@@ -13,6 +14,7 @@ type Task struct {
 	Description  string `json:"description"`
 	AssignedDate string `json:"assignedDate"`
 	Importance   int64  `json:"importance"`
+	User         string `json:"user_email"`
 	Done         bool   `json:"done"`
 }
 
@@ -23,10 +25,11 @@ type CompleteTask struct {
 func init() {
 	config.Connect()
 	db = config.GetDB()
-	db.AutoMigrate(&Task{}, &User{})
+	db.AutoMigrate(&Task{}, &User{}, &Sessions{})
 }
 
 func (b *Task) CreateTask() *Task {
+	b.User = LoggedInUser
 	db.NewRecord(b)
 	db.Create(&b)
 	return b
@@ -34,7 +37,7 @@ func (b *Task) CreateTask() *Task {
 
 func GetAllTasks() []Task {
 	var Tasks []Task
-	db.Find(&Tasks)
+	db.Where("User=?", LoggedInUser).Find(&Tasks)
 	return Tasks
 }
 
@@ -46,7 +49,7 @@ func GetTaskById(Id int64) (*Task, *gorm.DB) {
 
 func GetTasksByAssignedDate(assignedDate string) []Task {
 	var getTasks []Task
-	db.Where("assigned_date=?", assignedDate).Find(&getTasks)
+	db.Where("User=?", LoggedInUser).Where("assigned_date=?", assignedDate).Find(&getTasks)
 	return getTasks
 }
 

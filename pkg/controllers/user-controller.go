@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/BogdanT-1/calendar-backend/pkg/models"
 	"github.com/BogdanT-1/calendar-backend/pkg/token"
@@ -48,15 +49,33 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	accessToken, err := server.TokenMaker.CreateToken(LoginUser.Email, server.Config.AccessTokenDuration)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	rsp := models.LoginUserResponse{
-		AccessToken: accessToken,
-		Username:    user.Username,
-		Email:       user.Email,
+	refreshToken, err := server.TokenMaker.CreateToken(LoginUser.Email, server.Config.RefreshTokenDuration)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
+
+	createSession := &models.Sessions{
+		Username:     user.Username,
+		RefreshToken: refreshToken,
+		IsBlocked:    false,
+		ExpiresAt:    time.Now().AddDate(0, 0, 1),
+	}
+
+	createSession.CreateSession()
+
+	rsp := models.LoginUserResponse{
+		RefreshToken:          refreshToken,
+		RefreshTokenExpiresAt: time.Now().AddDate(0, 0, 1),
+		AccessToken:           accessToken,
+		Username:              user.Username,
+		Email:                 user.Email,
+	}
+
 	res, _ := json.Marshal(rsp)
 	w.WriteHeader(http.StatusOK)
 	w.Write(res)

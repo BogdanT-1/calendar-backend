@@ -60,7 +60,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	createSession := &models.Sessions{
-		Username:     user.Username,
+		Username:     LoginUser.Email,
 		RefreshToken: refreshToken,
 		IsBlocked:    false,
 		ExpiresAt:    time.Now().AddDate(0, 0, 1),
@@ -72,6 +72,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		RefreshToken:          refreshToken,
 		RefreshTokenExpiresAt: time.Now().AddDate(0, 0, 1),
 		AccessToken:           accessToken,
+		AccessTokenExpiresAt:  time.Now().Add(time.Minute * 15),
 		Username:              user.Username,
 		Email:                 user.Email,
 	}

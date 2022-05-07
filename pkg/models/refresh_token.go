@@ -22,6 +22,6 @@ func (b *Sessions) CreateSession() *Sessions {
 
 func GetSessionByToken(refreshToken string) (*Sessions, *gorm.DB) {
 	var getSession Sessions
-	db := db.Where("RefreshToken=?", refreshToken).Find(&getSession)
+	db := db.Where("refresh_token=?", refreshToken).Find(&getSession)
 	return &getSession, db
 }

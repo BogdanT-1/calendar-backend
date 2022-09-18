@@ -29,7 +29,7 @@ func (c *CORSRouterDecorator) ServeHTTP(rw http.ResponseWriter, req *http.Reques
 
 func main() {
 	r := mux.NewRouter()
-	config, err := utils.LoadConfig("../")
+	config, err := utils.LoadConfig("./")
 	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}

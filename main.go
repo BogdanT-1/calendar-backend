@@ -35,5 +35,5 @@ func main() {
 	}
 	routes.RegisterCalendarRoutes(config, r)
 	http.Handle("/", &CORSRouterDecorator{r})
-	log.Fatal(http.ListenAndServe("localhost:9010", &CORSRouterDecorator{r}))
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", &CORSRouterDecorator{r}))
 }

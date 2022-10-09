@@ -18,5 +18,7 @@ FROM alpine:3.15
 WORKDIR /app
 COPY --from=builder /app/main .
 COPY app.env .
+# wait for db service to start api service
+COPY wait-for.sh .
 
 CMD ["/app/main"]

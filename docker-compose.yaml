@@ -11,6 +11,7 @@ services:
       - '3306:3306'
   api:
     build:
+    # you can you an image repo instead of building the image locally
       context: .
       dockerfile: Dockerfile
     ports:
@@ -20,3 +21,5 @@ services:
       - mysql
     entrypoint: ["sh", "/app/wait-for.sh", "mysql:3306", "--"]
     command: ["/app/main"]
+# depends_on does not wait for db and redis to be “ready” before starting web - only until they have been started.
+# If you need to wait for a service to be ready, see Controlling startup order for more on this problem and strategies for solving it.

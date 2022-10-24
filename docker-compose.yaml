@@ -11,7 +11,7 @@ services:
       - '3306:3306'
   api:
     build:
-    # you can you an image repo instead of building the image locally
+    # you can build an image repo instead of building the image locally
       context: .
       dockerfile: Dockerfile
     ports:

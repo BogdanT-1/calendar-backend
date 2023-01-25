@@ -23,3 +23,6 @@ services:
     command: ["/app/main"]
 # depends_on does not wait for db and redis to be “ready” before starting web - only until they have been started.
 # If you need to wait for a service to be ready, see Controlling startup order for more on this problem and strategies for solving it.
+
+#Login ECR
+#aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 727539878483.dkr.ecr.eu-north-1.amazonaws.com

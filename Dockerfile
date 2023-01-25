@@ -22,3 +22,4 @@ COPY app.env .
 COPY wait-for.sh .
 
 CMD ["/app/main"]
+
